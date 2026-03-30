@@ -32,7 +32,8 @@ export default function E01() {
   const [detail, setDetail] = useState(null)
   const [toast, setToast] = useState('')
   const [processing, setProcessing] = useState(new Set())
-  const [userName] = useState(() => localStorage.getItem('nova_username') || 'Unknown')
+  const [userName, setUserName] = useState('')
+  useEffect(() => { setUserName(localStorage.getItem('nova_username') || 'Unknown') }, [])
   const timerRef = useRef(null)
   const toastTimer = useRef(null)
 

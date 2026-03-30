@@ -17,7 +17,8 @@ export default function E02() {
   const [referrals, setReferrals] = useState([])
   const [showAdd, setShowAdd] = useState(false)
   const [toast, setToast] = useState('')
-  const [userName] = useState(() => localStorage.getItem('nova_username') || 'Unknown')
+  const [userName, setUserName] = useState('')
+  useEffect(() => { setUserName(localStorage.getItem('nova_username') || 'Unknown') }, [])
   const toastTimer = useRef(null)
 
   const showToast = useCallback((msg) => {
