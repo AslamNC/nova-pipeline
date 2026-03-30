@@ -21,7 +21,7 @@ export default function E01() {
   const [contacts, setContacts] = useState([])
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
-  const [query, setQuery] = useState('')
+  const [query] = useState('')
   const [loading, setLoading] = useState(false)
   const [foundContacts, setFoundContacts] = useState([])
   const [selectedFound, setSelectedFound] = useState(new Set())
@@ -80,7 +80,9 @@ export default function E01() {
           customPrompt: `This is an Ops-persona email. The recipient is ${c.title} — an operations leader, NOT an HR person. Frame Nova as a business continuity tool that prevents SLA misses and revenue loss, not as an HR tool.` }) })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      await saveContact({ ...c, email_subject: data.subject, email_body: data.body })
+      const updated = { ...c, email_subject: data.subject, email_body: data.body }
+      await saveContact(updated)
+      if (detail?.id === c.id) setDetail(updated)
       showToast('Email ready: ' + c.company)
     } catch(e) { showToast('Error: ' + e.message) }
     finally { setProcessing(p => { const n = new Set(p); n.delete(c.id); return n }) }
@@ -343,7 +345,10 @@ export default function E01() {
                 </div>
               )}
               <div style={{ display:'flex',gap:8,flexWrap:'wrap' }}>
-                <button onClick={()=>generateEmail(detail)} style={{ fontSize:12,padding:'7px 14px',borderRadius:8,border:'0.5px solid #e0dcd6',background:'#fff',cursor:'pointer',fontFamily:'inherit' }}>Generate Email</button>
+                <button onClick={()=>generateEmail(detail)} disabled={processing.has(detail.id)}
+                  style={{ fontSize:12,padding:'7px 14px',borderRadius:8,border:'0.5px solid #e0dcd6',background:'#fff',cursor:processing.has(detail.id)?'default':'pointer',opacity:processing.has(detail.id)?0.5:1,fontFamily:'inherit' }}>
+                  {processing.has(detail.id)?'Generating...':'Generate Email'}
+                </button>
                 {detail.email_body && <button onClick={()=>{navigator.clipboard.writeText('Subject: '+detail.email_subject+'\n\n'+detail.email_body);showToast('Copied!')}} style={{ fontSize:12,padding:'7px 14px',borderRadius:8,border:'0.5px solid #e0dcd6',background:'#fff',cursor:'pointer',fontFamily:'inherit' }}>Copy Email</button>}
                 <button onClick={()=>deleteContact(detail.id)} style={{ fontSize:12,padding:'7px 14px',borderRadius:8,border:'0.5px solid #e0dcd6',color:'#991b1b',background:'#fff',cursor:'pointer',fontFamily:'inherit' }}>Delete</button>
               </div>
