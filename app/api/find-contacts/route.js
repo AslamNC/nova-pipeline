@@ -15,7 +15,7 @@ Respond ONLY as JSON with no markdown:
 {"email":"...","email_confidence":"high|medium|low","linkedin":"...","title":"..."}`
 
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent?key=${key}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ Respond ONLY as a JSON array with no markdown:
 [{"company":"...","industry":"...","contact":"...","title":"...","email":"...","linkedin":"...","signal":"...","score":8,"confidence":"medium"}]`
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent?key=${key}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
