@@ -22,6 +22,7 @@ export default function E01() {
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [query] = useState('')
+  const [initialLoading, setInitialLoading] = useState(true)
   const [loading, setLoading] = useState(false)
   const [foundContacts, setFoundContacts] = useState([])
   const [selectedFound, setSelectedFound] = useState(new Set())
@@ -46,6 +47,7 @@ export default function E01() {
     const fetch = async () => {
       const { data } = await supabase.from('ops_contacts').select('*').order('added_at', { ascending: false })
       if (data) setContacts(data)
+      setInitialLoading(false)
     }
     fetch()
     const ch = supabase.channel('ops_contacts_changes')
@@ -185,7 +187,14 @@ export default function E01() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.length === 0 ? (
+                {initialLoading ? (
+                  <tr><td colSpan={8} style={{ textAlign:'center',padding:'4rem' }}>
+                    <div style={{ display:'flex',alignItems:'center',justifyContent:'center',gap:10,color:'#a09d98',fontSize:13 }}>
+                      <div style={{ width:16,height:16,border:'2px solid #e0dcd6',borderTopColor:'#3b82f6',borderRadius:'50%',animation:'spin .7s linear infinite' }} />
+                      Loading contacts...
+                    </div>
+                  </td></tr>
+                ) : filtered.length === 0 ? (
                   <tr><td colSpan={8} style={{ textAlign:'center',padding:'4rem',color:'#a09d98',fontSize:13 }}>
                     No contacts yet — click <strong>✦ Find Contacts</strong> to find COO/VP Ops leads.
                   </td></tr>
