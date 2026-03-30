@@ -22,6 +22,14 @@ export default function Pipeline() {
   const [filterScore, setFilterScore] = useState('')
   const [sortField, setSortField] = useState('added_at')
   const [sortDir, setSortDir] = useState('desc')
+
+  // Load persisted sort on mount
+  useEffect(() => {
+    const sf = localStorage.getItem('nova_sort_field')
+    const sd = localStorage.getItem('nova_sort_dir')
+    if (sf) setSortField(sf)
+    if (sd) setSortDir(sd)
+  }, [])
   const [selected, setSelected] = useState(new Set())
   const [showAdd, setShowAdd] = useState(false)
   const [detailLead, setDetailLead] = useState(null)
@@ -92,8 +100,16 @@ export default function Pipeline() {
 
   // ── SORT ──
   const handleSort = (field) => {
-    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
-    else { setSortField(field); setSortDir('asc') }
+    if (sortField === field) {
+      const newDir = sortDir === 'asc' ? 'desc' : 'asc'
+      setSortDir(newDir)
+      localStorage.setItem('nova_sort_dir', newDir)
+    } else {
+      setSortField(field)
+      setSortDir('asc')
+      localStorage.setItem('nova_sort_field', field)
+      localStorage.setItem('nova_sort_dir', 'asc')
+    }
   }
 
   const sortIcon = (field) => {
