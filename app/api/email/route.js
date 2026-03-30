@@ -14,7 +14,7 @@ Rules: 4-5 lines max. Sharp opening about their specific pain. One Nova benefit.
 Respond ONLY as JSON with no markdown: {"subject":"...","body":"..."}`
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent?key=${key}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
